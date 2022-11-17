@@ -1,0 +1,164 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "My App",
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text("Poet Phleng"),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+          ),
+          body: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/bg.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Column(children: [const SendDem()])),
+        ));
+  }
+}
+
+class Song{ //modal class for Person object
+   String name;
+   Song({required this.name});
+}
+
+class SendDem extends StatefulWidget {
+  const SendDem({super.key});
+
+  @override
+  State<SendDem> createState() => _SendDemState();
+}
+
+class _SendDemState extends State<SendDem> {
+  final inputtext = TextEditingController();
+  String word = '';
+
+  List<Song> songs= [];
+  
+  void initState() {
+    //adding item to list, you can add using json from network
+    songs.add(Song(name:"1"));
+    songs.add(Song(name:"2"));
+    
+    super.initState();
+  }
+
+  String getVideoID(String url) {
+    url = url.replaceAll("https://www.youtube.com/watch?v=", "");
+    url = url.replaceAll("https://m.youtube.com/watch?v=", "");
+    url = url.replaceAll("https://youtu.be/", "");
+    String urls = "https://img.youtube.com/vi/" + url + "/0.jpg";
+    print(urls);
+    return urls;
+  }
+
+  @override
+
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(top: 72, bottom: 70),
+          child: Container(
+              width: 310.0,
+              height: 260.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xFFD9E4FF).withOpacity(0.5),
+                    spreadRadius: 1.5,
+                    blurRadius: 0,
+                    offset: Offset(7, 8), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: 15),
+                  Text("2/3"),
+                  SizedBox(height: 15), //space
+              Expanded(child: ListView.builder(
+                itemCount: songs.length,
+                itemBuilder: (BuildContext Song, int index){
+                  return Container(
+                    width: 103,
+                    height: 80,
+                    child: Stack(
+                      children: [
+                        Positioned.fill(child:
+                        Text(songs[index])
+                        )
+                      ],
+                    )
+                  );
+                }
+                ))
+                ]
+                
+              )),
+        ),
+        Text(
+          "Add song",
+          style: TextStyle(fontSize: 20),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 65.0, vertical: 20.0),
+          child: TextField(
+            controller: inputtext,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(20)),
+              hintText: 'Song name',
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFFB0B2FF),
+            foregroundColor: Colors.white,
+            shadowColor: Color(0xFFD9E4FF),
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            minimumSize: Size(130, 50), //////// HERE
+          ),
+          onPressed: () {
+            setState(() {
+              word = inputtext.text;
+              inputtext.clear();
+            });
+          },
+          child: Text(
+            'Send >',
+            style: new TextStyle(
+              fontFamily: "comfortaa",
+              fontSize: 18.0,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
